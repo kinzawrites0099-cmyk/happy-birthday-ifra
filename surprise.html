@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise for Ifra!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            z-index: 100;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        
+        .nav a:hover, .nav a.active {
+            background: white;
+            color: #ff6b6b;
+        }
+        
+        .container {
+            padding: 120px 20px 50px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .game-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 25px;
+            padding: 40px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .game-title {
+            color: #ff6b6b;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .game-desc {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .play-game-btn {
+            padding: 12px 30px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .play-game-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .balloon-game, .quiz-game {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .balloon-area {
+            width: 90%;
+            height: 70%;
+            position: relative;
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .balloon {
+            position: absolute;
+            font-size: 3rem;
+            cursor: pointer;
+            animation: float-up 4s linear;
+        }
+        
+        @keyframes float-up {
+            0% { bottom: -50px; transform: translateX(0); }
+            100% { bottom: 100%; transform: translateX(50px); }
+        }
+        
+        .score-board {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .close-game {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: white;
+            color: #333;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        
+        .quiz-box {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .quiz-question {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .quiz-btn {
+            padding: 15px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quiz-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+        
+        .wishes-wall {
+            background: rgba(255,255,255,0.9);
+            border-radius: 25px;
+            padding: 30px;
+            margin-top: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .wishes-wall h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+        
+        .wish-tag {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="index.html">🏠 Home</a>
+        <a href="wish.html">🎂 Wish</a>
+        <a href="surprise.html" class="active">🎁 Surprise</a>
+        <a href="message.html">💌 Message</a>
+    </nav>
+    
+    <div class="container">
+        <h1>🎁 Surprise Zone!</h1>
+        <p class="subtitle">Games, Fun & Magic for Ifra!</p>
+        
+        <div class="games-grid">
+            <div class="game-card" onclick="startBalloonGame()">
+                <div class="game-icon">🎈</div>
+                <h3 class="game-title">Pop the Balloons!</h3>
+                <p class="game-desc">Pop as many balloons as you can in 30 seconds!</p>
+                <button class="play-game-btn">Play Now!</button>
+            </div>
+            
+            <div class="game-card" onclick="startQuiz()">
+                <div class="game-icon">🎯</div>
+                <h3 class="game-title">Birthday Quiz</h3>
+                <p class="game-desc">Test how well you know Ifra!</p>
+                <button class="play-game-btn">Start Quiz!</button>
+            </div>
+            
+            <div class="game-card" onclick="showConfetti()">
+                <div class="game-icon">🎊</div>
+                <h3 class="game-title">Confetti Blast</h3>
+                <p class="game-desc">Click for a magical celebration!</p>
+                <button class="play-game-btn">Celebrate!</button>
+            </div>
+        </div>
+        
+        <div class="wishes-wall">
+            <h2>💝 Birthday Wishes for Ifra</h2>
+            <div class="wish-tag">🎂 Happy 15th!</div>
+            <div class="wish-tag">✨ Shine Bright!</div>
+            <div class="wish-tag">🌟 Dream Big!</div>
+            <div class="wish-tag">💖 Stay Happy!</div>
+            <div class="wish-tag">🎉 Party Time!</div>
+            <div class="wish-tag">🎈 Best Wishes!</div>
+        </div>
+    </div>
+    
+    <div class="balloon-game" id="balloonGame">
+        <div class="score-board">Score: <span id="score">0</span></div>
+        <div class="balloon-area" id="balloonArea"></div>
+        <button class="close-game" onclick="closeBalloonGame()">Close Game</button>
+    </div>
+    
+    <div class="quiz-game" id="quizGame">
+        <div class="quiz-box">
+            <h3 class="quiz-question" id="quizQuestion">What is Ifra's favorite color?</h3>
+            <div class="quiz-options" id="quizOptions">
+                <button class="quiz-btn" onclick="checkAnswer(this, false)">Red</button>
+                <button class="quiz-btn" onclick="checkAnswer(this, true)">Pink</button>
+                <button class="quiz-btn" onclick="checkAnswer(this, false)">Blue</button>
+                <button class="quiz-btn" onclick="checkAnswer(this, false)">Green</button>
+            </div>
+        </div>
+        <button class="close-game" onclick="closeQuiz()" style="margin-top: 20px;">Close</button>
+    </div>
+    
+    <script>
+        let score = 0;
+        let balloonInterval;
+        
+        function startBalloonGame() {
+            document.getElementById('balloonGame').style.display = 'flex';
+            score = 0;
+            document.getElementById('score').textContent = score;
+            
+            balloonInterval = setInterval(() => {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.innerHTML = ['🎈', '🎉', '🎊', '✨'][Math.floor(Math.random() * 4)];
+                balloon.style.left = Math.random() * 90 + '%';
+                balloon.onclick = function() {
+                    score += 10;
+                    document.getElementById('score').textContent = score;
+                    this.style.transform = 'scale(1.5)';
+                    setTimeout(() => this.remove(), 200);
+                };
+                document.getElementById('balloonArea').appendChild(balloon);
+                
+                setTimeout(() => balloon.remove(), 4000);
+            }, 600);
+            
+            setTimeout(closeBalloonGame, 30000);
+        }
+        
+        function closeBalloonGame() {
+            clearInterval(balloonInterval);
+            document.getElementById('balloonGame').style.display = 'none';
+            document.getElementById('balloonArea').innerHTML = '';
+            alert('Game Over! Your score: ' + score);
+        }
+        
+        function startQuiz() {
+            document.getElementById('quizGame').style.display = 'flex';
+        }
+        
+        function checkAnswer(btn, isCorrect) {
+            if(isCorrect) {
+                btn.style.background = '#2ecc71';
+                alert('Correct! 🎉');
+            } else {
+                btn.style.background = '#e74c3c';
+                alert('Try again! 😅');
+            }
+        }
+        
+        function closeQuiz() {
+            document.getElementById('quizGame').style.display = 'none';
+        }
+        
+        function showConfetti() {
+            for(let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = ['🎉', '✨', '🎊', '🎈', '💖'][Math.floor(Math.random() * 5)];
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-50px';
+                confetti.style.fontSize = '2rem';
+                confetti.style.animation = `float-up ${Math.random() * 3 + 2}s linear`;
+                confetti.style.zIndex = '9999';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+    </script>
+</body>
+</html>
